@@ -1,0 +1,83 @@
+<odoo>
+    <data>
+        <report
+            id="report_order_details"
+            model="order.details"
+            string="Customer Bill"
+            report_type="qweb-pdf"
+            name="food_order_system.order_report_template"
+            file="food_order_system.order_report_template"
+            attachment_use="False"
+        />
+
+        <template id="order_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h3 style="text-align: center;">Order Details</h3>
+                            <table class="table">
+                                <tr>
+                                    <th scope="row">Order Number:</th>
+                                    <td colspan="3"><span t-field="doc.order_id"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Place:</th>
+                                    <td colspan="3"><span t-field="doc.tablename"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Food:</th>
+                                    <td colspan="3"><span t-field="doc.food_name"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Unit Price:</th>
+                                    <td colspan="3"><span t-field="doc.food_price"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Quantity:</th>
+                                    <td colspan="3"><span t-field="doc.quantity"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Total Price:</th>
+                                    <td colspan="3"><span t-field="doc.total_amount"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Payment Method:</th>
+                                    <td colspan="3">
+                                        <span t-field="doc.payment_method.name"/>
+                                        <img t-if="doc.payment_method.o_image" t-att-src="'data:image/png;base64,' + doc.payment_method.o_image.decode()" style="max-height: 100px;"/>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <h3 style="text-align: center;">Customer Info</h3>
+                            <table class="table">
+                                <tr>
+                                    <th scope="row">Customer Name:</th>
+                                    <td colspan="3"><span t-field="doc.c_name"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Customer Phone:</th>
+                                    <td colspan="3"><span t-field="doc.c_phone"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Customer Email:</th>
+                                    <td colspan="3"><span t-field="doc.c_email"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Customer Address:</th>
+                                    <td colspan="3"><span t-field="doc.c_address"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Customer Notes:</th>
+                                    <td colspan="3"><span t-field="doc.notes"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.food.order.system</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="90"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" data-string="Food Order System" id="robot_ip_link" string="Food Order System" data-key="food_order_system">
+                        <h2>Robot IP Address</h2>
+                        <div class="row mt16 o_settings_container" id="end_contract_setting">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane" style="text-align: center;">
+                                    <span class="o_form_label">Set Robot IP Address</span>
+                                    <div class="text-muted content-group mt16" style="text-align: center;">
+                                        <field name="robot_ip" class="text-center oe_inline" style="width: 100%;" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="robot_config_settings_action" model="ir.actions.act_window">
+            <field name="name">Robot IP</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'food_order_system', 'bin_size': False}</field>
+        </record>
+
+        <menuitem id="robot_config_settings_menu" name="Robot IP" action="robot_config_settings_action"/>
+    </data>
+</odoo>

@@ -1,0 +1,141 @@
+<odoo>
+	<template id="template_customer_details" name="Customer Order Form">
+		<t t-call="website.layout">
+			<div class="container">
+				<section class="s_picture pt48 pb24 o_cc o_cc2 o_colored_level" data-snippet="s_picture" data-name="Picture" t-att-style="'background-image: none;'">
+					<div id="wrap" class="oe_structure oe_empty">
+						<h1 class="text-center">
+							Order Information
+						</h1>
+                        <form role="form" t-attf-action="/submit/details/" method="POST">
+							<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+							<div class="form-row">
+								<div class="form-group col-md-6">
+									<label for="food_name">
+										Food Name:
+									</label>
+									<input type="text" id="food_name" class="form-control" name="food_name" t-att-value="food_name" readonly="1" />
+								</div>
+								<div class="form-group col-md-4"> 
+									<label for="food_price">
+										Price:
+									</label>
+									<input type="number" id="food_price" class="form-control" name="food_price" t-att-value="food_price" readonly="1" />
+								</div>
+								<div class="form-group col-md-2">
+									<label for="quantity">
+										Quantity:
+									</label>
+									<input type="number" class="form-control" id="quantity" name="quantity" required="required" />
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="form-group col-md-6">
+									<label for="tablename">
+										Select Place:
+									</label>
+									<select name="tablename" id="tablename" class="form-control">
+										<t t-foreach="tablename" t-as="s">
+											<option t-esc="s.name" t-att-value="s.id"/>
+										</t>
+									</select>
+								</div>
+								<div class="form-group col-md-6">
+									<label>Payment Method:</label>
+									<div class="button-group" style="display: flex; flex-direction: column; align-items: center;">
+										<t t-foreach="payment_method" t-as="method">
+											<div class="form-check mb-2">
+												<input class="form-check-input" type="radio" name="payment_method" t-att-value="method.id" t-att-id="'paymentMethodRadio' + str(method.id)" t-att-checked="str(payment_method_id == method.id).lower()"/>
+												<label class="form-check-label" t-att-for="'paymentMethodRadio' + str(method.id)">
+													<button type="button" class="btn btn-primary" t-att-class="'btn btn-primary ' + ('active' if payment_method_id == method.id else '')" data-toggle="modal" t-att-data-target="'#paymentModal' + str(method.id)" t-att-aria-pressed="str(payment_method_id == method.id).lower()">
+														<span t-esc="method.name"/>
+													</button>
+												</label>
+											</div>
+											<input type="hidden" name="payment_method" t-if="payment_method_id == method.id" t-att-value="method.id"/>
+										</t>
+									</div>
+								</div>
+
+							</div>
+
+							<h3 class="text-center">
+								Information For Home Delivery (Extra)
+							</h3>
+
+							<div class="form-row">
+								<div class="form-group col-md-6">
+									<label for="customer_name"> 
+										Customer Name:
+									</label>
+									<input type="text" class="form-control" id="c_name" name="c_name"/>
+								</div>
+								<div class="form-group col-md-6">
+									<label for="email">
+										Email:
+									</label>
+									<input type="email" class="form-control" id="c_email" name="c_email" />
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="form-group col-md-6">
+									<label for="phone">
+										Phone:
+									</label>
+									<input type="text" class="form-control" id="c_phone" name="c_phone" />
+								</div>
+								<div class="form-group col-md-6">
+									<label for="address">
+										Address:
+									</label>
+									<input type="text" class="form-control" id="c_address" name="c_address" />
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div>
+									<label>Enter if you want to say anything</label>
+									<textarea id="notes" class="form-control booking-form" name="notes" placeholder="Enter your comment here..."></textarea>
+								</div>
+							</div>
+
+							<button type="submit" class="btn btn-primary" style="margin-bottom: 10px;">
+								Confirm Order
+							</button>                              
+						</form>
+					</div>
+				</section>
+			</div>
+
+			<!-- Modal -->
+			<t t-foreach="payment_method" t-as="method">
+				<div class="modal fade" t-att-id="'paymentModal' + str(method.id)" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title" id="paymentModalLabel">
+									<t t-esc="method.name"/>
+								</h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                   <span aria-hidden="true">×</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-md-6">
+										<p>Account Number: <t t-esc="method.o_phone_number"/></p>
+										<p>Note: <t t-esc="method.note"/></p>
+									</div>
+									<div class="col-md-6 text-center">
+										<img t-if="method.o_image" t-att-src="'data:image/jpeg;base64,' + method.o_image.decode()" alt="QR Code" class="img-fluid" style="max-width: 200px;"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</t>
+		</t>
+	</template>
+</odoo>

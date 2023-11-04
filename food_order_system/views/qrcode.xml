@@ -1,0 +1,52 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_qrcode_tree">
+            <field name="name">QR Code Tree</field>
+            <field name="model">qr.code</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="o_phone_number"/>
+                    <field name = "name"/>
+                    <field name="o_image" widget="image" string= "QR Code" required="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_qrcode_form">
+            <field name="name">QR Code Form</field>
+            <field name="model">qr.code</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class = "oe_title">
+                            <label class="oe_edit_only" for="name" string="Online Account"/>
+                            <h1>
+                                <field name = "name"  placeholder = "e.g. Cash Or Bkash" required="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name = "o_phone_number"/>
+                                <field name="note"/>
+                            </group>
+                            <group>
+                                <field name="o_image" widget="image" string= "QR Code" class="oe_avatar" required="1"/>
+                            </group>
+                            
+                       </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_qrcode">
+            <field name="name">QR Code</field>
+            <field name="res_model">qr.code</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_qrcode_tree"/>
+            <field name="context">{}</field>
+        </record>
+
+        <menuitem id="menu_online_payment" name="Payment Method" sequence="10" action="action_qrcode" parent="main_food_menu_root"/>
+    </data>
+</odoo>

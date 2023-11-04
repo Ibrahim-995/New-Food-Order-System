@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_dsl_food,dsl_food,model_dsl_food,base.group_user,1,1,1,1
+
+access_order_details,order_details,model_order_details,base.group_user,1,1,1,1
+
+access_dsl_table,dsl_table,model_dsl_table,base.group_user,1,1,1,1
+
+access_nodemcu_device,nodemcu_device,model_nodemcu_device,base.group_user,1,1,1,1
+
+access_qr_code,qr_code,model_qr_code,base.group_user,1,1,1,1

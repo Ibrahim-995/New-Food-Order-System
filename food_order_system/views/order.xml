@@ -1,0 +1,169 @@
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="view_order_tree">
+			<field name="name">Order list</field>
+			<field name="model">order.details</field>
+			<field name="arch" type="xml">
+				<tree string="Order list">
+					<field name="order_id" />
+					<field name="food_name" />
+					<field name="quantity" />
+					<field name = "tablename"/>
+					<field name = "c_name"/>
+					<field name="currency_id" invisible="1"/>
+					<field name="total_amount" readonly="1" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Total Sell"/>
+					<field name="state"   
+					    decoration-success="state == 'done'"
+						decoration-info="state == 'draft'"
+						decoration-danger="state == 'cancel'"
+						decoration-warning="state == 'confirm'"
+						widget="badge"/>
+				</tree>
+			</field>
+		</record>
+
+        <record model="ir.ui.view" id="view_order_kanban">
+			<field name="name">Order Kanban</field>
+			<field name="model">order.details</field>
+			<field name="arch" type="xml">
+				<kanban default_group_by="tablename" class="o_res_partner_kanban">
+					<field name="order_id"/>
+					<field name="food_name"/>
+					<field name="quantity"/>
+					<field name="tablename"/>
+					<field name="c_name"/>
+					<field name="state"
+						decoration-success="state == 'done'"
+						decoration-info="state == 'draft'"
+						decoration-danger="state == 'cancel'"
+						decoration-warning="state == 'confirm'"
+						widget="badge"/>
+					<templates>
+						<t t-name="kanban-box">
+							<div t-attf-class="oe_kanban_global_click o_kanban_record_has_image_fill">
+								<div class="oe_kanban_details">
+									<h4>
+										<a type="open">
+											<field name="order_id"/>
+										</a>
+									</h4>
+									<ul>
+										<li>
+											<span class="oe_inline">Food: </span>
+											<field name="food_name" class="oe_inline"/>
+										</li>
+										<li>
+											<span class="oe_inline">Quantity: </span>
+											<field name="quantity" class="oe_inline"/>
+										</li>
+										<li>
+											<!-- <span class="oe_inline">State: </span> -->
+											<field name="state" class="oe_inline" 
+											decoration-success="state == 'done'"
+											decoration-info="state == 'draft'"
+											decoration-danger="state == 'cancel'"
+											decoration-warning="state == 'confirm'"
+											widget="badge"/>
+										</li>
+									</ul>
+								</div>
+								<div class="oe_kanban_bottom_right">
+                                   <button class="oe_kanban_action oe_kanban_action_delete" style="background-color: rgba(255, 0, 0, 0.5)" type="delete" name="Delete" title="Delete">
+                                     <i class="fa fa-trash-o"/>
+                                   </button>                               
+							   </div>
+							</div>
+						</t>
+					</templates>
+				</kanban>
+			</field>
+		</record>
+
+
+		<record id="orderdetails_form_view" model="ir.ui.view">
+			<field name="name">order.form.view</field>
+			<field name="model">order.details</field>
+			<field name="arch" type="xml">
+				<form string="Table Details">
+					<header>
+							<button id="button_confirm" string="Confirm Order" name="action_confirm" type="object" class="btn-primary" states="draft"/>
+							<button id="button_draft" string="Set To Draft" name="action_draft" type="object" class="btn-primary" states="cancel"/>
+							<button id="button_cancel" string="Cancel" name="action_cancel" states="draft,done,confirm" type="object"/>
+							<button id="button_done" string="Mark As Done" name="action_done" type="object" class="btn-primary" states="confirm"/>
+							<field name="state" widget="statusbar" statusbar_visible="draft,done,confirm"/>
+
+							<button name="action_led1" string=" Serve Line 1" type="object" class="oe_highlight"/>
+                       
+                            <button name="action_led2" string="Serve Line 2" type="object" class="oe_highlight"/>
+                        
+                            <button name="link_action" string="Serve Line 3" type="object" class="oe_highlight"/>
+                   </header>
+				   
+					<sheet>
+
+					   <div class="oe_title">
+                            <label class="oe_edit_only" for="order_id" string="Order Number"/>
+                            <h1>
+                                <field name="order_id"/>
+                            </h1>
+							<h2>
+							  <field name="tablename"/>
+							</h2>
+                        </div>
+						<group>
+							<group>
+								<field name="food_name" />
+								<field name="payment_method"/>
+								<field name="date_field" />
+							</group>
+							<group>
+							    <field name="food_price" widget="monetary" readonly="1" options="{'currency_field': 'currency_id'}"/>
+                                <field name="currency_id" invisible="1"/>
+								<field name="quantity" widget=''/>
+								<field name="total_amount" readonly="1" widget="monetary" options="{'currency_field': 'currency_id'}" style="font-weight: bold;"/>
+							</group>
+						</group>
+						<notebook>
+							<page string="Customer Info" name="food_customer_info">
+										<form>
+											<sheet>
+													<group>
+														<group>
+																<field name="c_name" />
+																<field name="c_phone" />
+																<field name="c_email" />
+																<field name="c_address" />
+														</group>
+
+														<group>
+																<field name="notes" />
+														</group>
+													</group>
+											</sheet>
+										</form>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="open_view_order_action" model="ir.actions.act_window">
+			<field name="name">Order List</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">order.details</field>
+			<field name="view_mode">kanban,tree,form</field>
+			<field name="view_id" ref="view_order_kanban" />
+			<field name="help" type="html">
+				<p class="o_view_nocontent_smiling_face">
+					No Record found!
+				</p>
+			</field>
+		</record>
+		
+		<menuitem id="main_food_menu_root" name="Food Order System" action="open_view_order_action" web_icon="food_order_system,static/description/icon.png"/>
+	    <menuitem id="food_kanban_menu" name="Foods" parent="main_food_menu_root" action="action_food_kanban" sequence = "2" />
+	
+		<menuitem id="order_list_menu" name="Orders" parent="main_food_menu_root" action="open_view_order_action" sequence = "1"/>
+
+	</data>
+</odoo>

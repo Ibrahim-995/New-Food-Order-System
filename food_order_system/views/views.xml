@@ -1,0 +1,79 @@
+<odoo>
+  <data>
+
+<!-- Define the kanban view -->
+  <record id="dsl_food_kanban_view" model="ir.ui.view">
+    <field name="name">DSL food Kanban</field>
+    <field name="model">dsl.food</field>
+    <field name="arch" type="xml">
+        <kanban class="o_res_partner_kanban">
+            <field name="id"/>
+            <field name="image"/>
+            <templates>
+                <t t-name="kanban-box">
+                    <div t-attf-class="oe_kanban_global_click o_kanban_record_has_image_fill">
+                        <div class="o_kanban_image d-none d-md-block"
+                             t-attf-style="background-image:url('#{kanban_image('dsl.food', 'image', record.id.raw_value, placeholder)}')">
+                        </div>
+
+                        <div class="oe_kanban_details">
+                            <h4>
+                                <a type="open">
+                                    <field name="name"/>
+                                </a>
+                            </h4>
+                            <ul>
+                                <li t-if="record.price.raw_value">
+                                    <field name="price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
+
+    <!-- Define the form view -->
+    <record id="view_food_form" model="ir.ui.view">
+      <field name="name">food.form</field>
+      <field name="model">dsl.food</field>
+      <field name="arch" type="xml">
+        <form string="Food Details">
+                <sheet>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <label class="oe_edit_only" for="name" string="Food Name"/>
+                        <h1>
+                            <field name="name" placeholder="Food Name"/>
+                        </h1>
+                    </div>
+              <group>
+                      <label for="price"/>
+                      <div>
+                          <field name="price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                          <field name="currency_id" invisible="1"/>
+                      </div>
+
+                      <label for="description"/>
+                      <div>
+                        <field name = "description"/>
+                      </div>
+              </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Define the action record -->
+    <record id="action_food_kanban" model="ir.actions.act_window">
+      <field name="name">Create Food</field>
+      <field name="res_model">dsl.food</field>
+      <field name="view_mode">kanban,form</field>
+      <field name="view_id" ref="dsl_food_kanban_view"/>
+      <field name="context">{}</field>
+    </record>
+  </data>
+</odoo>
